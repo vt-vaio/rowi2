@@ -12,9 +12,10 @@ Rowi2 will be available in two different versions:
 Details and technical specs: [Rowi2 Specifications][vaiotech-tech]  
 Where to buy: [Kiwi Warmer Online Shop][vaiotech-shop]
 
-[!IMPORTANT]
+**IMPORTANT**  
 Esphome firmware is currently under development and is awaiting the merging of the bl040 improvements [PR#8158][esphome-pr]
 
+<!-- URL references -->
 [esphome]: https://esphome.io
 [esphome-pr]: https://github.com/esphome/esphome/pull/8158
 
@@ -22,4 +23,5 @@ Esphome firmware is currently under development and is awaiting the merging of t
 [vaiotech-tech]: https://www.kiwi-warmer.co.nz/for-developers/
 [vaiotech-shop]: https://www.kiwi-warmer.co.nz/shop/
 
+<!-- local references -->
 [rowi2]: ./docs/rowi2.png
