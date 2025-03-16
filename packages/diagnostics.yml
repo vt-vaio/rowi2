@@ -1,0 +1,51 @@
+substitutions:
+  project_version: "1.0.0"
+
+binary_sensor:
+  - platform: status
+    name: "Status"
+
+button:
+  - platform: restart
+    id: restart_button
+    name: "Restart"
+    entity_category: diagnostic
+  - platform: factory_reset
+    id: factory_reset_button
+    name: "Factory Reset"
+    entity_category: diagnostic
+
+# # Sensors for ESP version and WIFI information
+text_sensor:
+  # Installed version
+  - platform: template
+    name: "Device Version"
+    id: device_version
+    icon: "mdi:label-outline"
+    entity_category: diagnostic
+    lambda: |-
+      return {"${project_version}"};
+    update_interval: 6h
+  # ESPHome version
+  - platform: version
+    hide_timestamp: true
+    name: 'ESPHome Version'
+  # IP address and connected SSID
+  - platform: wifi_info
+    ip_address:
+      name: 'IP Address'
+      icon: mdi:wifi
+    ssid:
+      name: 'SSID'
+      icon: mdi:wifi-strength-2
+
+sensor:
+  # Uptime
+  - platform: uptime
+    name: Uptime Sensor
+  # WiFi signal
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 120s
+  - platform: internal_temperature
+    name: "ESP Internal Temperature"

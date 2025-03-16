@@ -9,10 +9,15 @@ Rowi2 will be available in two different versions:
 - Default Rowi firwmare providing a local REST API & MQTT integration
 - ESPHome firmware
 
-Details and technical specs: [Rowi2 Specifications][vaiotech-tech]  
+There are two external sensors available
+
+- Temperature and Humidity
+- Temperature, Humidity and Air Quality
+
+Details and technical specs: [Rowi2 Specifications][vaiotech-tech]
 Where to buy: [Kiwi Warmer Online Shop][vaiotech-shop]
 
-**IMPORTANT**  
+**IMPORTANT**
 Esphome firmware is currently under development and is awaiting the merging of the bl040 improvements [PR#8158][esphome-pr]
 
 <!-- URL references -->

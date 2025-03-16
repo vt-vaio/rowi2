@@ -1,0 +1,108 @@
+# Communications
+i2c:
+  sda: GPIO22
+  scl: GPIO23
+  frequency: 400kHz
+
+number:
+  - platform: template
+    name: "Temperature Offset"
+    id: temperature_offset_ui
+    unit_of_measurement: "°C"
+    min_value: -20
+    max_value: 20
+    step: 0.1
+    mode: box
+    update_interval: never
+    optimistic: true
+    restore_value: true
+    initial_value: 0
+    icon: "mdi:thermometer"
+    entity_category: config
+    on_value:
+      - lambda: 'id(temperature_sensor).update();'
+  - platform: template
+    name: "Humidity Offset"
+    id: humidity_offset_ui
+    unit_of_measurement: "%"
+    min_value: -50
+    max_value: 50
+    step: 0.1
+    mode: box
+    update_interval: never
+    optimistic: true
+    restore_value: true
+    initial_value: 0
+    icon: "mdi:water-percent"
+    entity_category: config
+    on_value:
+      - lambda: 'id(humidity_sensor).update();'
+
+sensor:
+  - platform: hdc1080
+    temperature:
+      id: hdc1080_temperature
+    humidity:
+      id: hdc1080_humidity
+    update_interval: 60s
+
+  - platform: sht3xd
+    temperature:
+      id: sht3xd_temperature
+    humidity:
+      id: sht3xd_humidity
+    update_interval: 60s
+
+  - platform: template
+    name: "Temperature"
+    id: temperature_sensor
+    lambda: |-
+      if (isnan(id(hdc1080_temperature).state)) {
+        return id(sht3xd_temperature).state + id(temperature_offset_ui).state;
+      } else {
+        return id(hdc1080_temperature).state + id(temperature_offset_ui).state;
+      }
+    update_interval: 60s
+
+  - platform: template
+    name: "Humidity"
+    id: humidity_sensor
+    lambda: |-
+      if (isnan(id(hdc1080_humidity).state)) {
+        return id(sht3xd_humidity).state + id(humidity_offset_ui).state;
+      } else {
+        return id(hdc1080_humidity).state + id(humidity_offset_ui).state;
+      }
+    update_interval: 60s
+
+  - platform: ens160_i2c
+    eco2:
+      id: ens160_eco2
+      name: "eCO2"
+      disabled_by_default: true
+    tvoc:
+      id: ens160_tvoc
+      name: "Total Volatile Organic Compounds"
+      disabled_by_default: true
+    aqi:
+      id: ens160_aqi
+      name: "Air Quality Index"
+      disabled_by_default: true
+    update_interval: 60s
+    compensation:
+      temperature: temperature_sensor
+      humidity: humidity_sensor
+
+text_sensor:
+  - platform: template
+    name: "Air Quality Rating"
+    disabled_by_default: true
+    lambda: |-
+      switch ( (int) (id(ens160_aqi).state) ) {
+        case 1: return {"Excellent"};
+        case 2: return {"Good"};
+        case 3: return {"Moderate"};
+        case 4: return {"Poor"};
+        case 5: return {"Unhealthy"};
+        default: return {"Not Available"};
+      }

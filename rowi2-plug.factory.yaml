@@ -1,0 +1,34 @@
+packages:
+  rowi2-plug: !include rowi2-plug.yaml
+
+esphome:
+  project:
+    name: "Kiwi Warmer.Rowi2 Plug"
+    version: "dev"
+
+dashboard_import:
+  package_import_url: github://vt-vaio/rowi2/rowi2-plug.yaml
+
+# wifi:
+#   manual_ip:
+#     # Set this to the IP of the ESP
+#     static_ip: 192.168.x.x
+#     # Set this to the IP address of the router. Often ends with .1
+#     gateway: 192.168.x.1
+#     # The subnet of the network. 255.255.255.0 works for most home networks.
+#     subnet: 255.255.255.0
+
+esp32_ble:
+  name: rowi2-plug
+
+esp32_improv:
+  authorizer: center_button
+  on_start:
+    - lambda: id(improv_ble_in_progress) = true;
+    - script.execute: control_leds
+  on_provisioned:
+    - lambda: id(improv_ble_in_progress) = false;
+    - script.execute: control_leds
+  on_stop:
+    - lambda: id(improv_ble_in_progress) = false;
+    - script.execute: control_leds
