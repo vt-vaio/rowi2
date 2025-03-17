@@ -1,0 +1,197 @@
+globals:
+  - id: toggle_relay_requested
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+binary_sensor:
+  - platform: gpio
+    id: center_button
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - invert:
+      - delayed_on: 10ms # Debounce delay
+    on_press:
+      - script.execute: control_leds
+
+    on_multi_click:
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.1s
+        then:
+          - lambda: id(toggle_relay_requested) = true;
+      - timing:
+          - ON for at least 10s
+        then:
+          - logger.log: "Factory Reset requested"
+          - light.turn_on:
+              brightness: 100%
+              red: 100%
+              green: 0%
+              blue: 0%
+              id: rgb_light
+              effect: "none"
+          - lambda: id(factory_reset_requested) = true;
+
+    on_release:
+      - if:
+          condition:
+              lambda: return id(factory_reset_requested);
+          then:
+            - lambda: id(toggle_relay_requested) = false;
+            - lambda: id(factory_reset_requested) = false;
+            - button.press: factory_reset_button
+      - if:
+          condition:
+            lambda: return id(toggle_relay_requested);
+          then:
+            - lambda: id(toggle_relay_requested) = false;
+            - switch.toggle: relay
+
+switch:
+  - platform: gpio
+    id: relay
+    name: "${friendly_name}"
+    pin: GPIO2
+    restore_mode: RESTORE_DEFAULT_OFF
+    icon: mdi:power-socket-au
+    on_turn_off:
+      then:
+        - script.execute: control_leds
+    on_turn_on:
+      then:
+        - script.execute: control_leds
+
+output:
+  - platform: ledc
+    id: red
+    pin:
+      number: GPIO18
+      inverted: true
+  - platform: ledc
+    id: green
+    pin:
+      number: GPIO19
+      inverted: true
+  - platform: ledc
+    id: blue
+    pin:
+      number: GPIO21
+      inverted: true
+
+light:
+  - platform: rgb
+    id: rgb_light
+    red: red
+    green: green
+    blue: blue
+    effects:
+      - pulse:
+      - pulse:
+          name: "Fast Pulse"
+          transition_length: 0.5s
+          update_interval: 0.5s
+          min_brightness: 0%
+          max_brightness: 100%
+      - pulse:
+          name: "Slow Pulse"
+          transition_length: 500ms
+          update_interval: 2s
+      - pulse:
+          name: "Asymmetrical Pulse"
+          transition_length:
+            on_length: 1s
+            off_length: 500ms
+          update_interval: 1.5s
+script:
+  # Master script controlling the LEDs, based on different conditions : initialization in progress, wifi and api connected and voice assistant phase.
+  # For the sake of simplicity and re-usability, the script calls child scripts defined below.
+  # This script will be called every time one of these conditions is changing.
+  - id: control_leds
+    then:
+      - lambda: |
+          if (id(improv_ble_in_progress)) {
+            id(control_leds_improv_ble_state).execute();
+          } else if (id(init_in_progress)) {
+            id(control_leds_init_state).execute();
+          } else if (!id(wifi_id).is_connected() || !id(api_id).is_connected()){
+            id(control_leds_no_ha_connection_state).execute();
+          } else {
+            id(control_leds_relay_state).execute();
+          }
+
+  # Script executed during Improv BLE
+  # Aqua Fast Pulse
+  - id: control_leds_improv_ble_state
+    then:
+      - light.turn_on:
+          brightness: 66%
+          red: 0
+          green: 1
+          blue: 1
+          id: rgb_light
+          effect: "Fast Pulse"
+
+  # Script executed during initialization
+  # Solid White if Wifi is connected else Magenta pulse
+  - id: control_leds_init_state
+    then:
+      - if:
+          condition:
+            wifi.connected:
+          then:
+            - light.turn_on:
+                brightness: 66%
+                red: 1
+                green: 1
+                blue: 1
+                id: rgb_light
+                effect: "none"
+          else:
+            - light.turn_on:
+                brightness: 66%
+                red: 1
+                green: 0
+                blue: 1
+                id: rgb_light
+                effect: "Slow Pulse"
+
+  # Script executed when the device has no connection to Home Assistant
+  # Red pulse (This will be visible during HA updates for example)
+  - id: control_leds_no_ha_connection_state
+    then:
+      - light.turn_on:
+          brightness: 66%
+          red: 1
+          green: 0
+          blue: 0
+          id: rgb_light
+          effect: "Asymmetrical Pulse"
+
+  # Script executed when the center button is touched
+  # Solid Orange when relay is on else solid Green
+  - id: control_leds_relay_state
+    then:
+      - if:
+          condition:
+            switch.is_on: relay
+          then:
+            - light.turn_on:
+                brightness: 66%
+                red: 1
+                green: 0.5490
+                blue: 0
+                id: rgb_light
+                effect: "none"
+          else:
+            - light.turn_on:
+                brightness: 66%
+                red: 0
+                green: 0.5000
+                blue: 0
+                id: rgb_light
+                effect: "none"
+
