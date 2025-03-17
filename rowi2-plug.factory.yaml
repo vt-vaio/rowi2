@@ -7,7 +7,7 @@ esphome:
     version: "dev"
 
 dashboard_import:
-  package_import_url: github://vt-vaio/rowi2/rowi2-plug.yaml
+  package_import_url: github://vt-vaio/rowi2/rowi2-plug.yaml@main
   import_full_config: true
 
 # wifi:
