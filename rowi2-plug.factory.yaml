@@ -7,7 +7,7 @@ esphome:
     version: "dev"
 
 dashboard_import:
-  package_import_url: github://vt-vaio/rowi2/rowi2-plug.yaml@main
+  package_import_url: github://vt-vaio/rowi2/rowi2-plug.dashboard.yaml@main
   import_full_config: true
 
 # wifi:
@@ -33,3 +33,9 @@ esp32_improv:
   on_stop:
     - lambda: id(improv_ble_in_progress) = false;
     - script.execute: control_leds
+
+button:
+  - platform: factory_reset
+    id: factory_reset_button
+    name: "Factory Reset"
+    entity_category: diagnostic
