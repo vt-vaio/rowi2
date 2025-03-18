@@ -33,7 +33,7 @@ binary_sensor:
               green: 0%
               blue: 0%
               id: rgb_light
-              effect: "none"
+              effect: "Fast Pulse"
           - lambda: id(factory_reset_requested) = true;
 
     on_release:

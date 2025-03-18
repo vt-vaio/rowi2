@@ -10,10 +10,6 @@ button:
     id: restart_button
     name: "Restart"
     entity_category: diagnostic
-  - platform: factory_reset
-    id: factory_reset_button
-    name: "Factory Reset"
-    entity_category: diagnostic
 
 # # Sensors for ESP version and WIFI information
 text_sensor:
