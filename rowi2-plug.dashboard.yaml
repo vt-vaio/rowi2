@@ -36,7 +36,7 @@ esphome:
 esp32:
   board: nodemcu-32s
   framework:
-    type: arduino
+    type: esp-idf
 
 external_components:
   - source: github://pr#8158

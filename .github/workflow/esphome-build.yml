@@ -1,0 +1,126 @@
+name: Build ESPHome Firmware
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:  # Allows manual triggering
+  release:
+    types: [created]  # Triggered when a release is created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install ESPHome
+        run: pip install esphome
+
+      # Determine version based on event type
+      - name: Set version information
+        id: set_version
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            # Extract version from release tag (remove v prefix if present)
+            VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
+            echo "VERSION=${VERSION}" >> $GITHUB_ENV
+            echo "Using release version: ${VERSION}"
+          elif [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+            # For dev builds on main/master
+            DATE=$(date +'%Y%m%d')
+            COMMIT=$(git rev-parse --short HEAD)
+            DEV_VERSION="dev-${DATE}-${COMMIT}"
+            echo "DEV_VERSION=${DEV_VERSION}" >> $GITHUB_ENV
+            echo "VERSION=0.0.0-${DEV_VERSION}" >> $GITHUB_ENV
+            echo "Using development version: ${DEV_VERSION}"
+          else
+            # For PRs and other branches
+            echo "VERSION=development" >> $GITHUB_ENV
+            echo "Using default development version"
+          fi
+
+      # Validate factory YAML files
+      - name: Validate factory YAML files
+        run: |
+          for file in $(find . -name "*.factory.yaml" -not -path "*/\.*"); do
+            echo "Validating $file..."
+            esphome config $file
+          done
+
+      # Compile firmware
+      - name: Compile firmware
+        run: |
+          mkdir -p ./builds
+          for file in $(find . -name "*.factory.yaml" -not -path "*/\.*"); do
+            echo "Compiling $file..."
+
+            esphome compile --set project_version=${{ env.VERSION }} $file
+
+            # Extract device name from YAML
+            device_name=$(grep "^name:" $file | cut -d: -f2 | tr -d ' ')
+
+            # Copy the firmware binary and manifest
+            cp ./.esphome/build/$device_name/.pioenvs/$device_name/firmware.bin ./builds/$device_name.bin
+            cp ./.esphome/build/$device_name/manifest.json ./builds/$device_name.json
+
+            # Update version in manifest file
+            if [[ -n "${{ env.VERSION }}" ]]; then
+              # Update version in the manifest JSON
+              sed -i 's/"version": "[^"]*"/"version": "${{ env.VERSION }}"/' ./builds/$device_name.json
+              echo "Updated version in manifest for $device_name"
+            fi
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: esphome-builds
+          path: ./builds/
+
+      # Update the latest-dev tag
+      - name: Update latest-dev tag
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag -f latest-dev
+          git push origin latest-dev -f
+
+      # Create/update the latest-dev release
+      - name: Create/Update latest-dev Release
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Latest Development Build
+          tag_name: latest-dev
+          files: ./builds/*
+          prerelease: true
+          body: |
+            Latest development build generated from commit ${{ github.sha }}
+            Version: ${{ env.VERSION }}
+            Date: $(date +'%Y-%m-%d %H:%M:%S')
+
+            This is an automated development build and may contain unstable features.
+            For production use, please use the latest stable release.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload builds to an existing release
+      - name: Upload to existing release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: ./builds/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

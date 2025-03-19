@@ -1,5 +1,5 @@
 substitutions:
-  project_version: "1.0.0"
+  project_version: "dev"
 
 binary_sensor:
   - platform: status
