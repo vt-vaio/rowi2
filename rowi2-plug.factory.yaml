@@ -23,14 +23,14 @@ dashboard_import:
   package_import_url: github://vt-vaio/rowi2/rowi2-plug.dashboard.yaml@main
   import_full_config: true
 
-# wifi:
-#   manual_ip:
-#     # Set this to the IP of the ESP
-#     static_ip: 192.168.x.x
-#     # Set this to the IP address of the router. Often ends with .1
-#     gateway: 192.168.x.1
-#     # The subnet of the network. 255.255.255.0 works for most home networks.
-#     subnet: 255.255.255.0
+wifi:
+  manual_ip:
+    # Set this to the IP of the ESP
+    static_ip: 192.168.17.68
+    # Set this to the IP address of the router. Often ends with .1
+    gateway: 192.168.17.1
+    # The subnet of the network. 255.255.255.0 works for most home networks.
+    subnet: 255.255.255.0
 
 esp32_ble:
   name: rowi2-plug

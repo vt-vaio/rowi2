@@ -17,6 +17,7 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       dev_version: ${{ steps.version.outputs.dev_version }}
+      build_type: ${{ steps.version.outputs.build_type }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -29,6 +30,7 @@ jobs:
             # Extract version from release tag (remove v prefix if present)
             VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
             echo version=${VERSION} >> $GITHUB_OUTPUT
+            echo build_type==release >> $GITHUB_OUTPUT
             echo "Using release version: ${VERSION}"
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             # For dev builds on main
@@ -36,7 +38,8 @@ jobs:
             COMMIT=$(git rev-parse --short HEAD)
             DEV_VERSION="dev-${DATE}-${COMMIT}"
             echo dev_version=${DEV_VERSION} >> $GITHUB_OUTPUT
-            echo version=0.0.0-${DEV_VERSION} >> $GITHUB_OUTPUT
+            echo version=${DEV_VERSION} >> $GITHUB_OUTPUT
+            echo build_type==latest >> $GITHUB_OUTPUT
             echo "Using development version: ${DEV_VERSION}"
           else
             # For PRs and other branches
@@ -47,6 +50,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: [prepare]
+    outputs:
+      build-artifact-id: ${{ steps.upload-artifacts.outputs.artifact-id }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -62,7 +67,25 @@ jobs:
           complete-manifest: true
 
       - name: Upload artifacts
+        id: upload-artifacts
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: esphome-builds
-          path: ./${{ steps.esphome-build.outputs.name }}/
+          name: firmware-${{ needs.prepare.outputs.build_type }}
+          path: ${{ steps.esphome-build.outputs.name }}
+
+        # Update the latest-dev tag
+      - name: Update latest-dev tag
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag -f latest-dev
+          git push origin latest-dev -f
+
+  # publish:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - prepare
+  #     - build
+  #   steps:
+
