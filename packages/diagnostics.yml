@@ -1,6 +1,3 @@
-substitutions:
-  project_version: "dev"
-
 binary_sensor:
   - platform: status
     name: "Status"
@@ -13,15 +10,6 @@ button:
 
 # # Sensors for ESP version and WIFI information
 text_sensor:
-  # Installed version
-  - platform: template
-    name: "Device Version"
-    id: device_version
-    icon: "mdi:label-outline"
-    entity_category: diagnostic
-    lambda: |-
-      return {"${project_version}"};
-    update_interval: 6h
   # ESPHome version
   - platform: version
     hide_timestamp: true
