@@ -17,7 +17,6 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       dev_version: ${{ steps.version.outputs.dev_version }}
-      build_type: ${{ steps.version.outputs.build_type }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -30,7 +29,6 @@ jobs:
             # Extract version from release tag (remove v prefix if present)
             VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
             echo version=${VERSION} >> $GITHUB_OUTPUT
-            echo build_type==release >> $GITHUB_OUTPUT
             echo "Using release version: ${VERSION}"
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             # For dev builds on main
@@ -39,7 +37,6 @@ jobs:
             DEV_VERSION="dev-${DATE}-${COMMIT}"
             echo dev_version=${DEV_VERSION} >> $GITHUB_OUTPUT
             echo version=${DEV_VERSION} >> $GITHUB_OUTPUT
-            echo build_type==latest >> $GITHUB_OUTPUT
             echo "Using development version: ${DEV_VERSION}"
           else
             # For PRs and other branches
@@ -70,7 +67,7 @@ jobs:
         id: upload-artifacts
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: firmware-${{ needs.prepare.outputs.build_type }}
+          name: firmware-${{ needs.prepare.outputs.version }}
           path: ${{ steps.esphome-build.outputs.name }}
 
         # Update the latest-dev tag
@@ -82,10 +79,16 @@ jobs:
           git tag -f latest-dev
           git push origin latest-dev -f
 
-  # publish:
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - prepare
-  #     - build
-  #   steps:
+  publish:
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+      - build
+    steps:
+      - uses: actions/download-artifact@v4.2.1
+        with:
+          path: output
+          name: firmware-${{ needs.prepare.outputs.version }}
+      - name: Display structure of downloaded files
+        run: ls -R output
 
