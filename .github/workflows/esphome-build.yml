@@ -89,6 +89,23 @@ jobs:
         with:
           path: output
           name: firmware-${{ needs.prepare.outputs.version }}
-      - name: Display structure of downloaded files
-        run: ls -R output
+
+          # Create/update the latest-dev release
+      - name: Create/Update latest-dev Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          name: Latest Development Build
+          tag_name: latest-dev
+          files: ./output/*
+          prerelease: true
+          body: |
+            Latest development build generated from commit ${{ github.sha }}
+            Version: ${{ env.VERSION }}
+            Date: $(date +'%Y-%m-%d %H:%M:%S')
+
+            This is an automated development build and may contain unstable features.
+            For production use, please use the latest stable release.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
