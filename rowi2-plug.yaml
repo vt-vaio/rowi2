@@ -61,7 +61,6 @@ ota:
 wifi:
   id: wifi_id
   on_connect:
-    - lambda: id(improv_ble_in_progress) = false;
     - lambda: id(init_in_progress) = false;
     - script.execute: control_leds
   on_disconnect:
