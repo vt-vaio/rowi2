@@ -90,7 +90,12 @@ jobs:
           path: output
           name: firmware-${{ needs.prepare.outputs.version }}
 
-          # Create/update the latest-dev release
+      - name: Genearate build date
+        id: generate-date
+        run: |
+          echo gen_date=$(date +'%Y-%m-%d %H:%M:%S') >> $GITHUB_OUTPUT
+
+        # Create/update the latest-dev tag
       - name: Create/Update latest-dev Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2.2.1
@@ -101,11 +106,34 @@ jobs:
           prerelease: true
           body: |
             Latest development build generated from commit ${{ github.sha }}
-            Version: ${{ env.VERSION }}
-            Date: $(date +'%Y-%m-%d %H:%M:%S')
+            Version: ${{ needs.prepare.outputs.version }}
+            Date: ${{ steps.generate-date.outputs.gen_date }}
 
             This is an automated development build and may contain unstable features.
             For production use, please use the latest stable release.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+        # Create/update the stable tag
+      - name: Create/Update stable
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          tag_name: stable
+          files: ./output/*
+          body: |
+            Latest release build generated from commit ${{ github.sha }}
+            Version: ${{ needs.prepare.outputs.version }}
+            Date: ${{ steps.generate-date.outputs.gen_date }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        # Upload build to an actual release
+      - name: Upload to existing release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: ./output/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
