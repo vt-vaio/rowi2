@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
-      dev_version: ${{ steps.version.outputs.dev_version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -35,7 +34,6 @@ jobs:
             DATE=$(date +'%Y%m%d')
             COMMIT=$(git rev-parse --short HEAD)
             DEV_VERSION="dev-${DATE}-${COMMIT}"
-            echo dev_version=${DEV_VERSION} >> $GITHUB_OUTPUT
             echo version=${DEV_VERSION} >> $GITHUB_OUTPUT
             echo "Using development version: ${DEV_VERSION}"
           else
@@ -47,8 +45,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: [prepare]
-    outputs:
-      build-artifact-id: ${{ steps.upload-artifacts.outputs.artifact-id }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
