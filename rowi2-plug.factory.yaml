@@ -3,34 +3,28 @@ packages:
 
 esphome:
   project:
-    name: "Kiwi Warmer.Rowi2 Plug"
-    version: "dev"
+    name: Kiwi Warmer.Rowi2 Plug
+    version: dev
 
 ota:
   - platform: http_request
     id: ota_http_request
 
 http_request:
-  verify_ssl: false
 
 update:
   - platform: http_request
-    name: None
+    name: Rowi2 Plug Firmware
     id: update_http_request
-    source: https://github.com/vt-vaio/rowi2/releases/latest/download/manifest.json
+    source: https://github.com/vt-vaio/rowi2/releases/download/stable/manifest.json
 
 dashboard_import:
-  package_import_url: github://vt-vaio/rowi2/rowi2-plug.dashboard.yaml@main
+  package_import_url: github://vt-vaio/rowi2/rowi2-plug.yaml@main
   import_full_config: true
 
 wifi:
-  manual_ip:
-    # Set this to the IP of the ESP
-    static_ip: 192.168.17.68
-    # Set this to the IP address of the router. Often ends with .1
-    gateway: 192.168.17.1
-    # The subnet of the network. 255.255.255.0 works for most home networks.
-    subnet: 255.255.255.0
+  on_connect:
+    - lambda: id(improv_ble_in_progress) = false;
 
 esp32_ble:
   name: rowi2-plug
@@ -55,8 +49,8 @@ button:
 
 switch:
   - platform: template
-    id: beta_firmware
-    name: Beta firmware
+    id: dev_firmware
+    name: Use dev firmware
     icon: "mdi:test-tube"
     disabled_by_default: true
     entity_category: config
@@ -68,5 +62,5 @@ switch:
       - component.update: update_http_request
     on_turn_off:
       - logger.log: "OTA updates set to use Production firmware"
-      - lambda: id(update_http_request).set_source_url("https://github.com/vt-vaio/rowi2/releases/latest/download/manifest.json");
+      - lambda: id(update_http_request).set_source_url("https://github.com/vt-vaio/rowi2/releases/download/stable/manifest.json");
       - component.update: update_http_request
