@@ -54,9 +54,8 @@ jobs:
         run: |
           sed -i "s/version: dev/version: ${{ needs.prepare.outputs.version }}/g" rowi2-plug.factory.yaml
       - name: Replace remote_package ref
-        if: github.event_name == 'release'
         run: |
-          sed -i "s/ref: main/ref: ${{ needs.prepare.outputs.commit_sha }}/g" rowi2-plug.yaml
+          sed -i "s|ref: main|ref: ${{ github.head_ref || github.ref_name }}|g" rowi2-plug.yaml
       - name: Build firmware with ESPHome
         uses: esphome/build-action@v6
         id: esphome-build
@@ -81,7 +80,7 @@ jobs:
           git push origin latest-dev -f
 
         # Update the stable tag
-      - name: Update stablev tag
+      - name: Update stable tag
         if: github.event_name == 'release'
         run: |
           git config user.name github-actions
