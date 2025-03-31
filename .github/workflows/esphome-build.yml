@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
+      commit_sha: ${{ steps.version.outputs.commit_sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
@@ -24,6 +25,8 @@ jobs:
       - name: Set version information
         id: version
         run: |
+          COMMIT=$(git rev-parse --short HEAD)
+          echo commit_sha=${COMMIT} >> $GITHUB_OUTPUT
           if [[ "${{ github.event_name }}" == "release" ]]; then
             # Extract version from release tag (remove v prefix if present)
             VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
@@ -32,7 +35,6 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             # For dev builds on main
             DATE=$(date +'%Y%m%d')
-            COMMIT=$(git rev-parse --short HEAD)
             DEV_VERSION="dev-${DATE}-${COMMIT}"
             echo version=${DEV_VERSION} >> $GITHUB_OUTPUT
             echo "Using development version: ${DEV_VERSION}"
@@ -51,7 +53,10 @@ jobs:
       - name: Replace project version
         run: |
           sed -i "s/version: dev/version: ${{ needs.prepare.outputs.version }}/g" rowi2-plug.factory.yaml
-
+      - name: Replace remote_package ref
+        if: github.event_name == 'release'
+        run: |
+          sed -i "s/ref: main/ref: ${{ needs.prepare.outputs.commit_sha }}/g" rowi2-plug.yaml
       - name: Build firmware with ESPHome
         uses: esphome/build-action@v6
         id: esphome-build
@@ -74,6 +79,15 @@ jobs:
           git config user.email github-actions@github.com
           git tag -f latest-dev
           git push origin latest-dev -f
+
+        # Update the stable tag
+      - name: Update stablev tag
+        if: github.event_name == 'release'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag -f stable
+          git push origin stable -f
 
   publish:
     runs-on: ubuntu-latest
