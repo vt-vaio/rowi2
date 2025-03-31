@@ -4,6 +4,12 @@ globals:
     restore_value: no
     initial_value: 'false'
 
+button:
+  - platform: factory_reset
+    id: factory_reset_button
+    name: "Factory Reset"
+    entity_category: diagnostic
+
 binary_sensor:
   - platform: gpio
     id: center_button

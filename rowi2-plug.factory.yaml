@@ -47,12 +47,6 @@ esp32_improv:
     - lambda: id(improv_ble_in_progress) = false;
     - script.execute: control_leds
 
-button:
-  - platform: factory_reset
-    id: factory_reset_button
-    name: "Factory Reset"
-    entity_category: diagnostic
-
 switch:
   - platform: template
     id: dev_firmware
