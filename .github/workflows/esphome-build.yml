@@ -39,7 +39,7 @@ jobs:
             DATE=$(date +'%Y%m%d')
             DEV_VERSION="dev-${DATE}-${COMMIT}"
             echo version=${DEV_VERSION} >> $GITHUB_OUTPUT
-            echo package_ref=${COMMIT} >> $GITHUB_OUTPUT
+            echo package_ref=${{ github.sha }} >> $GITHUB_OUTPUT
             echo "Using development version: ${DEV_VERSION}"
           else
             # For PRs and other branches
