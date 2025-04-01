@@ -6,7 +6,7 @@ This project is the home of the [esphome][esphome] firmware of the [Vaiotech KW6
 
 Rowi2 will be available in two different versions:
 
-- Default Rowi firwmare providing a local REST API & MQTT integration
+- Default Rowi firmware providing a local REST API & MQTT integration
 - ESPHome firmware
 
 There are two external sensors available

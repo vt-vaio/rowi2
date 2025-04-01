@@ -6,6 +6,7 @@ packages:
 
   remote_package:
      url: https://github.com/vt-vaio/rowi2
+     ref: main
      files:
        - packages/core.yml
        - packages/climate.yml
