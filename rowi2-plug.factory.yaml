@@ -16,7 +16,7 @@ http_request:
 
 update:
   - platform: http_request
-    name: Rowi2 Plug Firmware
+    name: Firmware
     id: update_http_request
     source: https://github.com/vt-vaio/rowi2/releases/download/stable/manifest.json
 
