@@ -12,14 +12,18 @@ sensor:
     tuya_mode: false
     resistor_one: 0.511
     voltage:
+      id: bl0940_voltage
       name: 'Voltage'
       accuracy_decimals: 3
     current:
+      id: bl0940_current
       name: 'Current'
       accuracy_decimals: 3
     power:
+      id: bl0940_power
       name: 'Power'
     energy:
+      id: bl0940_energy
       name: 'Energy'
     internal_temperature:
       name: 'bl0940 Internal temperature'

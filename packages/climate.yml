@@ -56,6 +56,8 @@ sensor:
   - platform: template
     name: "Temperature"
     id: temperature_sensor
+    device_class: temperature
+    unit_of_measurement: "°C"
     lambda: |-
       if (isnan(id(hdc1080_temperature).state)) {
         return id(sht3xd_temperature).state + id(temperature_offset_ui).state;
@@ -67,6 +69,8 @@ sensor:
   - platform: template
     name: "Humidity"
     id: humidity_sensor
+    device_class: humidity
+    unit_of_measurement: "%"
     lambda: |-
       if (isnan(id(hdc1080_humidity).state)) {
         return id(sht3xd_humidity).state + id(humidity_offset_ui).state;
