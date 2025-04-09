@@ -14,7 +14,8 @@ packages:
      files:
        - packages/core.yml
        - packages/climate.yml
-       - packages/energy.yml
+      #  - packages/energy.yml
+       - packages/energy_cal.yml
       #  - packages/ble-proxy.yml
        - packages/diagnostics.yml
 
