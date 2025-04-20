@@ -111,7 +111,7 @@ jobs:
         # Create/update the latest-dev tag
       - name: Create/Update latest-dev Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v2.2.1
+        uses: softprops/action-gh-release@v2.2.2
         with:
           name: Latest Development Build
           tag_name: latest-dev
@@ -130,7 +130,7 @@ jobs:
         # Create/update the stable tag
       - name: Create/Update stable
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v2.2.1
+        uses: softprops/action-gh-release@v2.2.2
         with:
           tag_name: stable
           files: ./output/*
@@ -144,7 +144,7 @@ jobs:
         # Upload build to an actual release
       - name: Upload to existing release
         if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v2.2.1
+        uses: softprops/action-gh-release@v2.2.2
         with:
           tag_name: ${{ github.ref_name }}
           files: ./output/*
