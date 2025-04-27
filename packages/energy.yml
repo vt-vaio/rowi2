@@ -26,78 +26,13 @@ button:
           id: energy_calibration_ui
           value: 0
 
-number:
-  - platform: template
-    id: current_calibration_ui
-    name: "Cal Current"
-    unit_of_measurement: "%"
-    min_value: -10
-    max_value: 10
-    step: 0.01
-    mode: box
-    update_interval: never
-    optimistic: true
-    restore_value: true
-    initial_value: 0
-    icon: "mdi:percent"
-    entity_category: config
-    # disabled_by_default: true
-  - platform: template
-    id: voltage_calibration_ui
-    name: "Cal Voltage"
-    unit_of_measurement: "%"
-    min_value: -10
-    max_value: 10
-    step: 0.01
-    mode: box
-    update_interval: never
-    optimistic: true
-    restore_value: true
-    initial_value: 0
-    icon: "mdi:percent"
-    entity_category: config
-    # disabled_by_default: true
-  - platform: template
-    id: power_calibration_ui
-    name: "Cal Power"
-    unit_of_measurement: "%"
-    min_value: -10
-    max_value: 10
-    step: 0.01
-    mode: box
-    update_interval: never
-    optimistic: true
-    restore_value: true
-    initial_value: 0
-    icon: "mdi:percent"
-    entity_category: config
-    disabled_by_default: true
-  - platform: template
-    id: energy_calibration_ui
-    name: "Cal Energy"
-    unit_of_measurement: "%"
-    min_value: -10
-    max_value: 10
-    step: 0.01
-    mode: box
-    update_interval: never
-    optimistic: true
-    restore_value: true
-    initial_value: 0
-    icon: "mdi:percent"
-    entity_category: config
-    disabled_by_default: true
-
 sensor:
   - platform: bl0940
+    id: rowi2
     uart_id: uart_bus
     tuya_mode: false
     resistor_one: 0.5113
     resistor_shunt: 1.035
-    current_calibration: current_calibration_ui
-    voltage_calibration: voltage_calibration_ui
-    power_calibration: power_calibration_ui
-    energy_calibration: energy_calibration_ui
     voltage:
       id: bl0940_voltage
       name: 'Voltage'
@@ -116,3 +51,21 @@ sensor:
       name: 'bl0940 Internal temperature'
       entity_category: diagnostic
     update_interval: 10s
+
+number:
+  - platform: bl0940
+    bl0940_id: rowi2
+    current_calibration:
+      id: current_calibration_ui
+      name: "Cal Current"
+    voltage_calibration:
+      id: voltage_calibration_ui
+      name: "Cal Voltage"
+    power_calibration:
+      id: power_calibration_ui
+      name: "Cal Power"
+      disabled_by_default: true
+    energy_calibration:
+      id: energy_calibration_ui
+      name: "Cal Energy"
+      disabled_by_default: true
