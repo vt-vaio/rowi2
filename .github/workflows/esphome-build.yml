@@ -98,7 +98,7 @@ jobs:
       - prepare
       - build
     steps:
-      - uses: actions/download-artifact@v4.2.1
+      - uses: actions/download-artifact@v4.3.0
         with:
           path: output
           name: firmware-${{ needs.prepare.outputs.version }}
