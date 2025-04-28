@@ -7,24 +7,27 @@ uart:
   stop_bits: 1
 
 button:
-  - platform: template
-    id: calibration_reset
+  - platform: bl0940
+    bl0940_id: rowi2
     name: "Cal  Reset"
-    entity_category: config
-    icon: "mdi:restart"
-    on_press:
-      - number.set:
-          id: current_calibration_ui
-          value: 0
-      - number.set:
-          id: voltage_calibration_ui
-          value: 0
-      - number.set:
-          id: power_calibration_ui
-          value: 0
-      - number.set:
-          id: energy_calibration_ui
-          value: 0
+
+number:
+  - platform: bl0940
+    bl0940_id: rowi2
+    current_calibration:
+      id: current_calibration_ui
+      name: "Cal Current"
+    voltage_calibration:
+      id: voltage_calibration_ui
+      name: "Cal Voltage"
+    power_calibration:
+      id: power_calibration_ui
+      name: "Cal Power"
+      disabled_by_default: true
+    energy_calibration:
+      id: energy_calibration_ui
+      name: "Cal Energy"
+      disabled_by_default: true
 
 sensor:
   - platform: bl0940
@@ -51,21 +54,3 @@ sensor:
       name: 'bl0940 Internal temperature'
       entity_category: diagnostic
     update_interval: 10s
-
-number:
-  - platform: bl0940
-    bl0940_id: rowi2
-    current_calibration:
-      id: current_calibration_ui
-      name: "Cal Current"
-    voltage_calibration:
-      id: voltage_calibration_ui
-      name: "Cal Voltage"
-    power_calibration:
-      id: power_calibration_ui
-      name: "Cal Power"
-      disabled_by_default: true
-    energy_calibration:
-      id: energy_calibration_ui
-      name: "Cal Energy"
-      disabled_by_default: true
