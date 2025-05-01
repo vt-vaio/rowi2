@@ -17,16 +17,20 @@ number:
     current_calibration:
       id: current_calibration_ui
       name: "Cal Current"
+      icon: mdi:screwdriver
     voltage_calibration:
       id: voltage_calibration_ui
       name: "Cal Voltage"
+      icon: mdi:screwdriver
     power_calibration:
       id: power_calibration_ui
       name: "Cal Power"
+      icon: mdi:screwdriver
       disabled_by_default: true
     energy_calibration:
       id: energy_calibration_ui
       name: "Cal Energy"
+      icon: mdi:screwdriver
       disabled_by_default: true
 
 sensor:
