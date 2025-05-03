@@ -5,6 +5,8 @@
 substitutions:
   name: rowi2-plug
   friendly_name: "Rowi2 Plug"
+  climate_update_interval: 10s
+  energy_update_interval: 10s
 
 packages:
 

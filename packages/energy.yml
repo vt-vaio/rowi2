@@ -1,4 +1,7 @@
 # Energy Meter Connection
+substitutions:
+  energy_update_interval: 10s
+
 uart:
   id: uart_bus
   tx_pin: GPIO17
@@ -57,4 +60,4 @@ sensor:
     internal_temperature:
       name: 'bl0940 Internal temperature'
       entity_category: diagnostic
-    update_interval: 10s
+    update_interval: '${energy_update_interval}'

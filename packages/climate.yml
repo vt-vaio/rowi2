@@ -1,4 +1,8 @@
 # Communications
+substitutions:
+  climate_update_interval: 10s
+
+
 i2c:
   sda: GPIO22
   scl: GPIO23
@@ -44,14 +48,14 @@ sensor:
       id: hdc1080_temperature
     humidity:
       id: hdc1080_humidity
-    update_interval: 60s
+    update_interval: '${climate_update_interval}'
 
   - platform: sht3xd
     temperature:
       id: sht3xd_temperature
     humidity:
       id: sht3xd_humidity
-    update_interval: 60s
+    update_interval: '${climate_update_interval}'
 
   - platform: template
     name: "Temperature"
@@ -64,7 +68,7 @@ sensor:
       } else {
         return id(hdc1080_temperature).state + id(temperature_offset_ui).state;
       }
-    update_interval: 60s
+    update_interval: '${climate_update_interval}'
 
   - platform: template
     name: "Humidity"
@@ -77,7 +81,7 @@ sensor:
       } else {
         return id(hdc1080_humidity).state + id(humidity_offset_ui).state;
       }
-    update_interval: 60s
+    update_interval: '${climate_update_interval}'
 
   - platform: ens160_i2c
     eco2:
@@ -92,7 +96,7 @@ sensor:
       id: ens160_aqi
       name: "Air Quality Index"
       disabled_by_default: true
-    update_interval: 60s
+    update_interval: '${climate_update_interval}'
     compensation:
       temperature: temperature_sensor
       humidity: humidity_sensor
