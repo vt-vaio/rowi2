@@ -61,7 +61,7 @@ jobs:
         run: |
           sed -i "s|ref: main|ref: ${{ needs.prepare.outputs.package_ref }}|g" rowi2-plug.yaml
       - name: Build firmware with ESPHome
-        uses: esphome/build-action@v6
+        uses: esphome/build-action@v7
         id: esphome-build
         with:
           yaml-file: 'rowi2-plug.factory.yaml'
