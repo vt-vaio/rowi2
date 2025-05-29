@@ -1,7 +1,7 @@
-# Energy Meter Connection
 substitutions:
   energy_update_interval: 10s
 
+# Energy Meter Sensor Connection
 uart:
   id: uart_bus
   tx_pin: GPIO17

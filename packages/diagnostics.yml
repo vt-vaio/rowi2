@@ -8,7 +8,7 @@ button:
     name: "Restart"
     entity_category: diagnostic
 
-# # Sensors for ESP version and WIFI information
+# Sensors for ESP version and WIFI information
 text_sensor:
   # ESPHome version
   - platform: version

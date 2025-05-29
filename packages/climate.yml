@@ -1,8 +1,7 @@
-# Communications
 substitutions:
   climate_update_interval: 10s
 
-
+# Communication with sensors
 i2c:
   sda: GPIO22
   scl: GPIO23

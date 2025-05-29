@@ -1,9 +1,3 @@
-globals:
-  - id: toggle_relay_requested
-    type: bool
-    restore_value: no
-    initial_value: 'false'
-
 button:
   - platform: factory_reset
     id: factory_reset_button
@@ -28,7 +22,10 @@ binary_sensor:
           - ON for at most 1s
           - OFF for at least 0.1s
         then:
-          - lambda: id(toggle_relay_requested) = true;
+          - lambda: |-
+              if (!id(improv_ble_in_progress)) {
+                id(relay).toggle();
+              }
       - timing:
           - ON for at least 10s
         then:
@@ -47,15 +44,8 @@ binary_sensor:
           condition:
               lambda: return id(factory_reset_requested);
           then:
-            - lambda: id(toggle_relay_requested) = false;
             - lambda: id(factory_reset_requested) = false;
             - button.press: factory_reset_button
-      - if:
-          condition:
-            lambda: return id(toggle_relay_requested);
-          then:
-            - lambda: id(toggle_relay_requested) = false;
-            - switch.toggle: relay
 
 switch:
   - platform: gpio
