@@ -4,42 +4,42 @@ After initial power-up or a factory reset, the device will enter onboarding mode
 
 ## How to Onboard
 
-1. **Open the Home Assistant Companion App**  
+1. **Open the Home Assistant Companion App**
    Make sure Bluetooth is enabled on your mobile device.
 
-2. **Go to:**  
+2. **Go to:**
    **Settings → Devices & Services**
 
-   <a href="onboarding/rowi-mobile-ble-1.png">
-     <img src="onboarding/rowi-mobile-ble-1.png" alt="Onboarding step 1" width="100">
+   <a href="onboarding/rowi-mobile-ble-1.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-1.png" alt="Onboarding step 1" width="200">
    </a>
-   <a href="onboarding/rowi-mobile-ble-2.png">
-     <img src="onboarding/rowi-mobile-ble-2.png" alt="Onboarding step 2" width="100">
+   <a href="onboarding/rowi-mobile-ble-2.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-2.png" alt="Onboarding step 2" width="200">
    </a>
-   <a href="onboarding/rowi-mobile-ble-3.png">
-     <img src="onboarding/rowi-mobile-ble-3.png" alt="Onboarding step 3" width="100">
+   <a href="onboarding/rowi-mobile-ble-3.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-3.png" alt="Onboarding step 3" width="200">
    </a>
-   <a href="onboarding/rowi-mobile-ble-4.png">
-     <img src="onboarding/rowi-mobile-ble-4.png" alt="Onboarding step 4" width="100">
+   <a href="onboarding/rowi-mobile-ble-4.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-4.png" alt="Onboarding step 4" width="200">
    </a>
-   <a href="onboarding/rowi-mobile-ble-5.png">
-     <img src="onboarding/rowi-mobile-ble-5.png" alt="Onboarding step 5" width="100">
+   <a href="onboarding/rowi-mobile-ble-5.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-5.png" alt="Onboarding step 5" width="200">
    </a>
-   <a href="onboarding/rowi-mobile-ble-6.png">
-     <img src="onboarding/rowi-mobile-ble-6.png" alt="Onboarding step 6" width="100">
+   <a href="onboarding/rowi-mobile-ble-6.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-6.png" alt="Onboarding step 6" width="200">
    </a>
-   <a href="onboarding/rowi-mobile-ble-7.png">
-     <img src="onboarding/rowi-mobile-ble-7.png" alt="Onboarding step 7" width="100">
+   <a href="onboarding/rowi-mobile-ble-7.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-7.png" alt="Onboarding step 7" width="200">
    </a>
-   <a href="onboarding/rowi-mobile-ble-8.png">
-     <img src="onboarding/rowi-mobile-ble-8.png" alt="Onboarding step 8" width="100">
+   <a href="onboarding/rowi-mobile-ble-8.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-8.png" alt="Onboarding step 8" width="200">
    </a>
 
-3. **View your onboarded device in ESPHome:**  
+3. **View your onboarded device in ESPHome:**
    Go to **Settings → Devices & Services → ESPHome** to see your device listed.
 
-   <a href="onboarding/rowi-mobile-ble-9.png">
-     <img src="onboarding/rowi-mobile-ble-9.png" alt="Onboarding step 9" width="100">
+   <a href="onboarding/rowi-mobile-ble-9.png" target="_blank">
+     <img src="onboarding/rowi-mobile-ble-9.png" alt="Onboarding step 9" width="200">
    </a>
 
 ---
