@@ -1,24 +1,81 @@
 # Vaiotech KW 600 Rowi2
 
-This project is the home of the [esphome][esphome] firmware of the [Vaiotech KW600][vaiotech]
+This project is the home of the [ESPHome][esphome] firmware for the [Vaiotech KW600][vaiotech].
 
-  ![Vaiotech KW600][rowi2]
+<img src="./docs/rowi2.png" alt="Vaiotech KW600" width="400">
 
-Rowi2 will be available in two different versions:
+> **Note:**  
+> If you intend to integrate your device with Home Assistant, please ensure you order the **ESPHome firmware** version of Rowi2. The default firmware does **not** support Home Assistant integration.
 
-- Default Rowi firmware providing a local REST API & MQTT integration
-- ESPHome firmware
+Rowi2 is available in two different versions:
+- **Default Rowi firmware:** Local REST API & MQTT integration
+- **ESPHome firmware:** For Home Assistant and custom automation
 
-There are two external sensors available
-
+There are two external sensors available:
 - Temperature and Humidity
-- Temperature, Humidity and Air Quality
+- Temperature, Humidity, and Air Quality
 
-Details and technical specs: [Rowi2 Specifications][vaiotech-tech]
+Details and technical specs: [Rowi2 Specifications][vaiotech-tech]  
 Where to buy: [Kiwi Warmer Online Shop][vaiotech-shop]
 
-**IMPORTANT**
-Esphome firmware is currently under development and is awaiting the merging of the bl040 improvements [PR#8158][esphome-pr]
+---
+
+**IMPORTANT**  
+ESPHome firmware is currently under development and is awaiting the merging of the bl0940 improvements [PR#8158][esphome-pr].
+
+---
+
+## ESPHome Firmware Features
+
+- Onboard device to Home Assistant using [Improv-BLE][onboarding]
+- Temperature and humidity offset
+- Option to calibrate voltage, current, power, and energy
+- Factory reset device by pressing button for over 10 seconds
+- **Automatic firmware updates:** The ESPHome factory firmware supports auto-update for new releases
+
+---
+
+## LED Status & Light Modes
+
+The RGB LED on the Rowi2 device indicates the current state:
+
+| State                                 | Color / Effect           | Description                                      |
+|----------------------------------------|--------------------------|--------------------------------------------------|
+| **Improv BLE (Onboarding)**            | Aqua, Fast Pulse         | Device is in onboarding mode                     |
+| **Initialization (WiFi connected)**    | Solid White              | Device is initializing, WiFi connected           |
+| **Initialization (WiFi not connected)**| Magenta, Slow Pulse      | Device is initializing, WiFi not connected       |
+| **No Home Assistant Connection**       | Red, Asymmetrical Pulse  | Lost connection to Home Assistant                |
+| **Relay ON**                           | Solid Orange             | Output relay is ON                               |
+| **Relay OFF**                          | Solid Green              | Output relay is OFF                              |
+| **Factory Reset Requested**            | Solid Red, Fast Pulse    | Hold button >10s, factory reset pending          |
+
+**Notes:**
+- The LED updates automatically based on device state.
+- Factory reset is triggered by holding the button for more than 10 seconds.
+
+---
+
+## Getting Started
+
+- [Onboarding Guide (Improv-BLE)][onboarding]
+- [Developer Guide: Building & Installing ESPHome Firmware][building]
+
+---
+
+## Troubleshooting
+
+- If your device is not discovered during onboarding, ensure Bluetooth is enabled and the device is in onboarding mode (after power-up or factory reset).
+- For manual firmware installation or advanced usage, see the [Developer Guide][building].
+
+---
+
+## Links
+
+- [Rowi2 Specifications][vaiotech-tech]
+- [Buy Rowi2][vaiotech-shop]
+- [Build it yourself: Developer Guide][building]
+
+---
 
 <!-- URL references -->
 [esphome]: https://esphome.io
@@ -28,5 +85,5 @@ Esphome firmware is currently under development and is awaiting the merging of t
 [vaiotech-tech]: https://www.kiwi-warmer.co.nz/for-developers/
 [vaiotech-shop]: https://www.kiwi-warmer.co.nz/shop/
 
-<!-- local references -->
-[rowi2]: ./docs/rowi2.png
+[onboarding]: ./docs/ONBOARDING.md
+[building]: ./docs/BUILDING.md
