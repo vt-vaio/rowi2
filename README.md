@@ -4,7 +4,7 @@ This project is the home of the [ESPHome][esphome] firmware for the [Vaiotech KW
 
 <img src="./docs/rowi2.png" alt="Vaiotech KW600" width="400">
 
-> **Note:**  
+> **Note:**
 > If you intend to integrate your device with Home Assistant, please ensure you order the **ESPHome firmware** version of Rowi2. The default firmware does **not** support Home Assistant integration.
 
 Rowi2 is available in two different versions:
@@ -15,12 +15,12 @@ There are two external sensors available:
 - Temperature and Humidity
 - Temperature, Humidity, and Air Quality
 
-Details and technical specs: [Rowi2 Specifications][vaiotech-tech]  
+Details and technical specs: [Rowi2 Specifications][vaiotech-tech]
 Where to buy: [Kiwi Warmer Online Shop][vaiotech-shop]
 
 ---
 
-**IMPORTANT**  
+**IMPORTANT**
 ESPHome firmware is currently under development and is awaiting the merging of the bl0940 improvements [PR#8158][esphome-pr].
 
 ---
@@ -58,6 +58,7 @@ The RGB LED on the Rowi2 device indicates the current state:
 ## Getting Started
 
 - [Onboarding Guide (Improv-BLE)][onboarding]
+- [Calibration Guide][calibrating]
 - [Developer Guide: Building & Installing ESPHome Firmware][building]
 
 ---
@@ -73,6 +74,7 @@ The RGB LED on the Rowi2 device indicates the current state:
 
 - [Rowi2 Specifications][vaiotech-tech]
 - [Buy Rowi2][vaiotech-shop]
+- [Calibration Guide][calibrating]
 - [Build it yourself: Developer Guide][building]
 
 ---
@@ -87,3 +89,4 @@ The RGB LED on the Rowi2 device indicates the current state:
 
 [onboarding]: ./docs/ONBOARDING.md
 [building]: ./docs/BUILDING.md
+[calibrating]: ./docs/CALIBRATING.md
