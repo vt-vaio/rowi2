@@ -3,10 +3,11 @@
 # !!! and uncomment ssid and password to be able to upload new firmware !!! #
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
 substitutions:
-  name: rowi2-plug
-  friendly_name: "Rowi2 Plug"
-  climate_update_interval: 10s
-  energy_update_interval: 10s
+  name: rowi2-plug                # Device name used in ESPHome and on the network
+  friendly_name: "Rowi2 Plug"     # Human-friendly device name for Home Assistant
+  climate_update_interval: 10s    # Update interval for climate sensors (temperature, humidity, etc.)
+  energy_update_interval: 1s      # Update interval for energy sensors and overcurrent checks
+  overcurrent_cutoff: '3'         # Number of consecutive energy_update_intervals the current must exceed the limit before overload cutoff
 
 packages:
 
