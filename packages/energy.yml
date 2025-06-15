@@ -1,5 +1,6 @@
 substitutions:
-  energy_update_interval: 10s
+  energy_update_interval: 1s
+  overcurrent_cutoff: 3  # Number of consecutive sensor update intervals the current must exceed the limit before overload cutoff
 
 # Energy Meter Sensor Connection
 uart:
@@ -35,6 +36,19 @@ number:
       name: "Cal Energy"
       icon: mdi:screwdriver
       disabled_by_default: true
+  - platform: template
+    id: max_current_a
+    name: "Max Current"
+    min_value: 1
+    max_value: 10
+    step: 0.1
+    mode: box
+    unit_of_measurement: A
+    initial_value: 10.0
+    restore_value: true
+    optimistic: true
+    icon: mdi:current-ac
+    entity_category: config
 
 sensor:
   - platform: bl0940
@@ -61,3 +75,34 @@ sensor:
       name: 'bl0940 Internal temperature'
       entity_category: diagnostic
     update_interval: '${energy_update_interval}'
+
+globals:
+  - id: overcurrent_counter
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+interval:
+  # This interval should match the sensor's update_interval for accurate overcurrent detection.
+  - interval: ${energy_update_interval}
+    then:
+      - if:
+          condition:
+            lambda: 'return id(bl0940_current).state > id(max_current_a).state;'
+          then:
+            - lambda: |-
+                id(overcurrent_counter) += 1;
+            - if:
+                condition:
+                  lambda: 'return id(overcurrent_counter) >= ${overcurrent_cutoff};'
+                then:
+                  - switch.turn_off: relay
+                  - logger.log: "Overcurrent detected: current exceeded limit for ${overcurrent_cutoff} consecutive readings. Relay turned off."
+                  - homeassistant.event:
+                      event: esphome.rowi2_overcurrent
+                      data:
+                        reason: "Current exceeded safe limit for ${overcurrent_cutoff} consecutive readings"
+                        value: !lambda 'return id(bl0940_current).state;'
+          else:
+            - lambda: |-
+                id(overcurrent_counter) = 0;
