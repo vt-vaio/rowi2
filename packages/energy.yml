@@ -54,7 +54,7 @@ sensor:
   - platform: bl0940
     id: rowi2
     uart_id: uart_bus
-    tuya_mode: false
+    legacy_mode: false
     resistor_one: 0.5118
     resistor_shunt: 1.045
     voltage:
