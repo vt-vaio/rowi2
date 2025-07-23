@@ -39,7 +39,7 @@ ESPHome firmware is currently under development and is awaiting the merging of t
 
 The RGB LED on the Rowi2 device indicates the current state:
 
-| State                                 | Color / Effect           | Description                                      |
+| State                                  | Color / Effect           | Description                                      |
 |----------------------------------------|--------------------------|--------------------------------------------------|
 | **Improv BLE (Onboarding)**            | Aqua, Fast Pulse         | Device is in onboarding mode                     |
 | **Initialization (WiFi connected)**    | Solid White              | Device is initializing, WiFi connected           |
@@ -47,7 +47,8 @@ The RGB LED on the Rowi2 device indicates the current state:
 | **No Home Assistant Connection**       | Red, Asymmetrical Pulse  | Lost connection to Home Assistant                |
 | **Relay ON**                           | Solid Orange             | Output relay is ON                               |
 | **Relay OFF**                          | Solid Green              | Output relay is OFF                              |
-| **Factory Reset Requested**            | Solid Red, Fast Pulse    | Hold button >10s, factory reset pending          |
+| **Factory Reset Requested**            | Solid Blue, Fast Pulse   | Hold button >10s, factory reset pending          |
+| **Overcurrent Detected**               | Solid Red, Fast Pulse    | Current exceeded configured limit, power cut     |
 
 **Notes:**
 - The LED updates automatically based on device state.

@@ -103,6 +103,8 @@ interval:
                       data:
                         reason: "Current exceeded safe limit for ${overcurrent_cutoff} consecutive readings"
                         value: !lambda 'return id(bl0940_current).state;'
+                  - lambda: id(overcurrent_cutoff_detected) = true;
+                  - script.execute: control_leds
           else:
             - lambda: |-
                 id(overcurrent_counter) = 0;

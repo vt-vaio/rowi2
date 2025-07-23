@@ -94,3 +94,8 @@ globals:
     type: bool
     restore_value: no
     initial_value: 'false'
+  # Global variable storing the state of the overcurrent cutoff detection
+  - id: overcurrent_cutoff_detected
+    type: bool
+    restore_value: no
+    initial_value: 'false'
