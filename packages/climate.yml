@@ -1,5 +1,6 @@
 substitutions:
   climate_update_interval: 10s
+  sensor_timeout_interval: 30s
 
 # Communication with sensors
 i2c:
@@ -45,15 +46,23 @@ sensor:
   - platform: hdc1080
     temperature:
       id: hdc1080_temperature
+      filters:
+        - timeout: '${sensor_timeout_interval}'
     humidity:
       id: hdc1080_humidity
+      filters:
+        - timeout: '${sensor_timeout_interval}'
     update_interval: '${climate_update_interval}'
 
   - platform: sht3xd
     temperature:
       id: sht3xd_temperature
+      filters:
+        - timeout: '${sensor_timeout_interval}'
     humidity:
       id: sht3xd_humidity
+      filters:
+        - timeout: '${sensor_timeout_interval}'
     update_interval: '${climate_update_interval}'
 
   - platform: template
