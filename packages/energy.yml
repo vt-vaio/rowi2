@@ -60,7 +60,7 @@ sensor:
     voltage:
       id: bl0940_voltage
       name: 'Voltage'
-      accuracy_decimals: 3
+      accuracy_decimals: 0
     current:
       id: bl0940_current
       name: 'Current'
