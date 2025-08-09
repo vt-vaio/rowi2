@@ -1,6 +1,5 @@
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
 # !!!  After adopting device you need to update the wifi configuration  !!! #
-# !!! and uncomment ssid and password to be able to upload new firmware !!! #
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
 substitutions:
   name: rowi2-plug                # Device name used in ESPHome and on the network
@@ -21,6 +20,7 @@ packages:
        - packages/energy.yml
       #  - packages/ble-proxy.yml
        - packages/diagnostics.yml
+       - packages/factory-ota.yml
 
 esphome:
   name: ${name}
@@ -54,6 +54,10 @@ external_components:
 # Enable logging
 logger:
 
+# select:
+#   - platform: logger
+#     name: "Logger select"
+
 # Enable Home Assistant API
 api:
   id: api_id
@@ -69,9 +73,20 @@ ota:
 
 wifi:
   id: wifi_id
-  # uncomment ssid and password and add values to your secrets.yaml
+
+  # Uncomment the following lines to upload a new firmware to a already connected device
+  # manual_ip:
+  #   # Set this to the IP of the ESP
+  #   static_ip: 192.168.x.x
+  #   # Set this to the IP address of the router. Often ends with .1
+  #   gateway: 192.168.x.1
+  #   # The subnet of the network. 255.255.255.0 works for most home networks.
+  #   subnet: 255.255.255.0
+
+  # Uncomment ssid and password and add values to your secrets.yaml
   # ssid: !secret wifi_ssid
   # password: !secret wifi_password
+
   on_connect:
     - lambda: id(init_in_progress) = false;
     - script.execute: control_leds
