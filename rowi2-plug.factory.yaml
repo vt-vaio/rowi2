@@ -1,5 +1,6 @@
 packages:
   rowi2-plug: !include rowi2-plug.yaml
+  factory-ota: !include packages/factory-ota.yml
 
 esphome:
   project:
@@ -11,6 +12,14 @@ dashboard_import:
   import_full_config: true
 
 wifi:
+  # Uncomment the following lines to upload a new firmware to a already connected device
+  # manual_ip:
+  #   # Set this to the IP of the ESP
+  #   static_ip: 192.168.x.x
+  #   # Set this to the IP address of the router. Often ends with .1
+  #   gateway: 192.168.x.1
+  #   # The subnet of the network. 255.255.255.0 works for most home networks.
+  #   subnet: 255.255.255.0
   on_connect:
     - delay: 5s
     - ble.disable:
