@@ -97,7 +97,9 @@ interval:
                   lambda: 'return id(overcurrent_counter) >= ${overcurrent_cutoff};'
                 then:
                   - switch.turn_off: relay
-                  - logger.log: "Overcurrent detected: current exceeded limit for ${overcurrent_cutoff} consecutive readings. Relay turned off."
+                  - logger.log:
+                      format: "Overcurrent detected: current exceeded limit for ${overcurrent_cutoff} consecutive readings. Relay turned off."
+                      level: WARN
                   - homeassistant.event:
                       event: esphome.rowi2_overcurrent
                       data:

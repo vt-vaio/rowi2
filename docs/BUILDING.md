@@ -42,7 +42,7 @@ pip install --upgrade esphome
 
 ## Build using esphome cli
 
-To be able to deploy the factory image to a running instance you need to specify the manual_ip settings in [factory.yaml][factory]
+To be able to deploy the factory image to a running instance you need to specify the manual_ip settings either in [factory.yaml][factory] or [plug.yaml][plug]
 
 
 ```yml
@@ -54,12 +54,6 @@ wifi:
     gateway: 192.168.x.1
     # The subnet of the network. 255.255.255.0 works for most home networks.
     subnet: 255.255.255.0
-  on_connect:
-    - delay: 5s
-    - ble.disable:
-    - lambda: id(improv_ble_in_progress) = false;
-  on_disconnect:
-    - ble.enable:
 ```
 
 Build and install firmware on the device:
@@ -71,3 +65,4 @@ esphome run rowi2-plug.factory.yaml
 If the device is connected to the USB port, ESPHome will allow you to select the install type.
 
 [factory]: ../rowi2-plug.factory.yaml
+[plug]: ../rowi2-plug.yaml
