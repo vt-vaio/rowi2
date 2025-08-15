@@ -12,12 +12,10 @@ uart:
 
 button:
   - platform: bl0940
-    bl0940_id: rowi2
     name: "Cal  Reset"
 
 number:
   - platform: bl0940
-    bl0940_id: rowi2
     current_calibration:
       id: current_calibration_ui
       name: "Cal Current"
