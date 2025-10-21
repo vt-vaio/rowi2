@@ -1,6 +1,6 @@
 substitutions:
   energy_update_interval: 1s
-  overcurrent_cutoff: 3  # Number of consecutive sensor update intervals the current must exceed the limit before overload cutoff
+  overcurrent_cutoff: 3 # Number of consecutive sensor update intervals the current must exceed the limit before overload cutoff
 
 # Energy Meter Sensor Connection
 uart:
@@ -58,7 +58,7 @@ sensor:
     voltage:
       id: bl0940_voltage
       name: 'Voltage'
-      accuracy_decimals: 0
+      accuracy_decimals: 1
     current:
       id: bl0940_current
       name: 'Current'
