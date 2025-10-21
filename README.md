@@ -20,11 +20,6 @@ Where to buy: [Kiwi Warmer Online Shop][vaiotech-shop]
 
 ---
 
-**IMPORTANT**
-ESPHome firmware is currently under development and is awaiting the merging of the bl0940 improvements [PR#8158][esphome-pr].
-
----
-
 ## ESPHome Firmware Features
 
 - Onboard device to Home Assistant using [Improv-BLE][onboarding]
