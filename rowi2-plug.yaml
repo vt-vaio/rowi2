@@ -12,19 +12,20 @@ substitutions:
 packages:
 
   remote_package:
-     url: https://github.com/vt-vaio/rowi2
-     ref: main
-     files:
-       - packages/core.yml
-       - packages/climate.yml
-       - packages/energy.yml
-      #  - packages/ble-proxy.yml
-       - packages/diagnostics.yml
+    url: https://github.com/vt-vaio/rowi2
+    ref: main
+    files:
+      - packages/core.yml
+      - packages/climate.yml
+      - packages/energy.yml
+      - packages/ble-proxy.yml
+      - packages/diagnostics.yml
 
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
   name_add_mac_suffix: true
+  min_version: '2025.10.0'
   on_boot:
     priority: 375
     then:
@@ -46,17 +47,17 @@ esp32:
   framework:
     type: esp-idf
 
-external_components:
-  - source: github://pr#8158
-    components: [bl0940]
 
 # Enable logging
 logger:
-  level: INFO
+  level: DEBUG
+  initial_level: INFO
 
-# select:
-#   - platform: logger
-#     name: "Logger select"
+select:
+  - platform: logger
+    id: logger_select
+    name: "Logger select"
+    disabled_by_default: true
 
 # Enable Home Assistant API
 api:
@@ -85,7 +86,7 @@ wifi:
     - script.execute: control_leds
 
 globals:
- # Global initialization variable. Initialized to true and set to false once everything is connected. Only used to have a smooth "plugging" experience
+  # Global initialization variable. Initialized to true and set to false once everything is connected. Only used to have a smooth "plugging" experience
   - id: init_in_progress
     type: bool
     restore_value: no
