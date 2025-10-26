@@ -47,17 +47,9 @@ esp32:
   framework:
     type: esp-idf
 
-
 # Enable logging
 logger:
-  level: DEBUG
-  initial_level: INFO
-
-select:
-  - platform: logger
-    id: logger_select
-    name: "Logger select"
-    disabled_by_default: true
+  level: INFO
 
 # Enable Home Assistant API
 api:
