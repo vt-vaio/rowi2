@@ -23,7 +23,7 @@ Where to buy: [Kiwi Warmer Online Shop][vaiotech-shop]
 ## ESPHome Firmware Features
 
 - Onboard device to Home Assistant using [Improv-BLE][onboarding]
-- **Bluetooth proxy:** Acts as a BLE proxy to relay Bluetooth Low Energy devices to Home Assistant, with a "Bluetooth Scanning" switch to enable/disable it
+- **Bluetooth proxy:** Acts as a BLE proxy to relay Bluetooth Low Energy devices to Home Assistant, with a "Bluetooth Scanning" switch to enable/disable BLE scanning and advertisement forwarding
 - Temperature and humidity offset
 - Option to calibrate voltage, current, power, and energy
 - Factory reset device by pressing button for over 10 seconds
