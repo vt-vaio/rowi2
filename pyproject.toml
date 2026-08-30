@@ -1,0 +1,11 @@
+[project]
+name = "rowi2"
+version = "0.1.0"
+description = "ESPHome firmware configuration for the Rowi2 smart plug"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "esphome",
+]
+
+[tool.uv]
+package = false

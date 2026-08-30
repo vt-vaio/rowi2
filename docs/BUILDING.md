@@ -8,37 +8,34 @@ git clone https://github.com/vt-vaio/rowi2.git
 
 ## Prepare esphome development environment
 
+This project uses [uv](https://docs.astral.sh/uv/) to manage the Python virtual environment. Install it first if you don't already have it:
+
+```bash
+# see https://docs.astral.sh/uv/getting-started/installation/ for other options
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
 ```bash
 # cd into checkout folder
 cd rowi2
 
-# check python version
-python3 --version
-```
-# Create virtual environment
-
-## using standard python way
-```bash
-python3 -m venv .venv
-
-# to activate venv
-source .venv/bin/activate
-```
-## using python oh-my-zsh plugin
-```bash
-mkv
-# to activate afterwards
-vrun
+# check uv version
+uv --version
 ```
 
-# install esphome
+# Create virtual environment and install esphome
+
+The required Python version and esphome dependency are declared in [`pyproject.toml`][pyproject]. Running `uv sync` creates `.venv` with a matching Python version and installs esphome into it:
+
 ```bash
-pip install --upgrade pip
-pip install esphome
+uv sync
 
 # to update after new versions of esphome is released use
-pip install --upgrade esphome
+uv lock --upgrade-package esphome
+uv sync
 ```
+
+Once synced, run esphome commands with `uv run esphome ...` — this uses `.venv` automatically without needing to activate it.
 
 ## Build using esphome cli
 
@@ -56,13 +53,20 @@ wifi:
     subnet: 255.255.255.0
 ```
 
+Compile the firmware without installing it (useful to check the build succeeds without a device connected):
+
+```bash
+uv run esphome compile rowi2-plug.factory.yaml
+```
+
 Build and install firmware on the device:
 
 ```bash
-esphome run rowi2-plug.factory.yaml
+uv run esphome run rowi2-plug.factory.yaml
 ```
 
 If the device is connected to the USB port, ESPHome will allow you to select the install type.
 
 [factory]: ../rowi2-plug.factory.yaml
 [plug]: ../rowi2-plug.yaml
+[pyproject]: ../pyproject.toml
