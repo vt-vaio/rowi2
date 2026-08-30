@@ -43,9 +43,11 @@ esphome:
             - script.execute: control_leds
 
 esp32:
-  board: nodemcu-32s
+  variant: esp32
   framework:
     type: esp-idf
+    advanced:
+      minimum_chip_revision: '3.1'
 
 # Enable logging
 logger:
