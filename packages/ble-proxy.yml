@@ -1,5 +1,6 @@
 # bluetooth_proxy
 esp32_ble_tracker:
+  id: ble_tracker
   scan_parameters:
     # We currently use the defaults to ensure Bluetooth
     # can co-exist with WiFi In the future we may be able to
@@ -8,3 +9,57 @@ esp32_ble_tracker:
 
 bluetooth_proxy:
   active: true
+
+globals:
+  # Whether the BLE scan should be running. Persisted so the switch below
+  # survives a reboot instead of always restarting the scan.
+  - id: bluetooth_scanning_enabled
+    type: bool
+    restore_value: true
+    initial_value: 'true'
+
+esphome:
+  on_boot:
+    then:
+      - if:
+          condition:
+            lambda: return !id(bluetooth_scanning_enabled);
+          then:
+            - esp32_ble_tracker.stop_scan:
+
+switch:
+  - platform: template
+    name: "Bluetooth Scanning"
+    icon: mdi:bluetooth
+    entity_category: config
+    # Persistence is handled by the bluetooth_scanning_enabled global + on_boot
+    # below; the switch's own restore mechanism must stay out of the way, or
+    # its default (ALWAYS_OFF for a lambda-driven switch) forces scanning off
+    # on every boot regardless of what was actually persisted.
+    restore_mode: DISABLED
+    lambda: return id(ble_tracker).scan_running();
+    turn_on_action:
+      - globals.set:
+          id: bluetooth_scanning_enabled
+          value: 'true'
+      - esp32_ble_tracker.start_scan:
+          continuous: true
+    turn_off_action:
+      - globals.set:
+          id: bluetooth_scanning_enabled
+          value: 'false'
+      - esp32_ble_tracker.stop_scan:
+
+interval:
+  # Home Assistant can remotely request a scan mode change (active/passive)
+  # over the API, which resets the tracker's continuous flag and restarts
+  # scanning regardless of our switch. Re-assert "off" if that happens.
+  - interval: 15s
+    then:
+      - if:
+          condition:
+            and:
+              - lambda: return !id(bluetooth_scanning_enabled);
+              - lambda: return id(ble_tracker).scan_running();
+          then:
+            - esp32_ble_tracker.stop_scan:
